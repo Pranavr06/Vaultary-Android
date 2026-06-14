@@ -3,7 +3,9 @@ package com.vaultary.app.presentation.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,25 +19,23 @@ import com.vaultary.app.presentation.auth.AuthUiState
 import com.vaultary.app.presentation.auth.AuthViewModel
 
 @Composable
-fun LoginScreen(
+fun RegisterScreen(
     viewModel: AuthViewModel,
-    onNavigateToDashboard: () -> Unit,
-    onNavigateToTwoFactor: () -> Unit,
-    onNavigateToRegister: () -> Unit,
-    onNavigateToForgotPassword: () -> Unit,
-    onSocialLoginClick: (String) -> Unit
+    onNavigateBackToLogin: () -> Unit
 ) {
     var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var phone by remember { mutableStateOf("") }
+    var dob by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
     val state by viewModel.uiState.collectAsState()
 
     LaunchedEffect(state) {
-        when (state) {
-            is AuthUiState.Success -> onNavigateToDashboard()
-            is AuthUiState.TwoFactorRequired -> onNavigateToTwoFactor()
-            else -> {}
+        if (state is AuthUiState.RegistrationSuccess) {
+            viewModel.resetState()
+            onNavigateBackToLogin()
         }
     }
 
@@ -48,10 +48,10 @@ fun LoginScreen(
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState())
         ) {
             Text(
-                text = "Welcome to Vaultary",
+                text = "Create an Account",
                 color = MaterialTheme.colorScheme.onBackground,
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
@@ -61,7 +61,21 @@ fun LoginScreen(
             OutlinedTextField(
                 value = username,
                 onValueChange = { username = it },
-                label = { Text("Email or Username") },
+                label = { Text("Username") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    focusedLabelColor = MaterialTheme.colorScheme.primary,
+                )
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("Email") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
@@ -93,17 +107,33 @@ fun LoginScreen(
                 )
             )
 
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
-                horizontalArrangement = Arrangement.End
-            ) {
-                Text(
-                    text = "Forgot Password?",
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.clickable { onNavigateToForgotPassword() },
-                    fontSize = 14.sp
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = phone,
+                onValueChange = { phone = it },
+                label = { Text("Phone (10 digits)") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    focusedLabelColor = MaterialTheme.colorScheme.primary,
                 )
-            }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = dob,
+                onValueChange = { dob = it },
+                label = { Text("Date of Birth (DD/MM/YYYY)") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    focusedLabelColor = MaterialTheme.colorScheme.primary,
+                )
+            )
 
             if (state is AuthUiState.Error) {
                 Spacer(modifier = Modifier.height(16.dp))
@@ -114,10 +144,10 @@ fun LoginScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
             Button(
-                onClick = { viewModel.login(username, password) },
+                onClick = { viewModel.register(username, email, password, phone, dob) },
                 modifier = Modifier.fillMaxWidth().height(50.dp),
                 enabled = state !is AuthUiState.Loading,
                 shape = RoundedCornerShape(8.dp),
@@ -131,34 +161,22 @@ fun LoginScreen(
                         modifier = Modifier.size(24.dp)
                     )
                 } else {
-                    Text("Login", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    Text("Register", fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Text("Or continue with", color = MaterialTheme.colorScheme.onSurfaceVariant)
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                OutlinedButton(onClick = { onSocialLoginClick("google") }) { Text("Google") }
-                OutlinedButton(onClick = { onSocialLoginClick("github") }) { Text("GitHub") }
-                OutlinedButton(onClick = { onSocialLoginClick("linkedin") }) { Text("LinkedIn") }
-            }
-
-            Spacer(modifier = Modifier.height(32.dp))
-
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Don't have an account? ", color = MaterialTheme.colorScheme.onBackground)
+                Text("Already have an account? ", color = MaterialTheme.colorScheme.onBackground)
                 Text(
-                    text = "Register",
+                    text = "Login",
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable { onNavigateToRegister() }
+                    modifier = Modifier.clickable {
+                        viewModel.resetState()
+                        onNavigateBackToLogin()
+                    }
                 )
             }
         }

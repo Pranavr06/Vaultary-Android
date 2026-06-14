@@ -12,4 +12,13 @@ interface VaultaryApi {
     @POST("login/verify_2fa")
     suspend fun verify2fa(@Body request: Verify2faRequest): Response<Verify2faResponse>
 
+    @POST("register")
+    suspend fun register(@Body request: RegisterRequest): Response<ApiResponse>
+
+    @POST("forgot_password")
+    suspend fun forgotPassword(@Body request: ForgotPasswordRequest): Response<ApiResponse>
+
+    @POST("reset_password_confirm")
+    suspend fun resetPasswordConfirm(@Body request: ResetPasswordRequest): Response<ApiResponse>
+
 }
