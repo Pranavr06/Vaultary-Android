@@ -3,45 +3,29 @@ package com.vaultary.app
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModelProvider
+import com.vaultary.app.data.local.TokenManager
+import com.vaultary.app.data.remote.RetrofitInstance
+import com.vaultary.app.data.repository.AuthRepository
+import com.vaultary.app.presentation.auth.AuthViewModel
+import com.vaultary.app.presentation.ui.navigation.VaultaryNavGraph
 import com.vaultary.app.ui.theme.VaultaryTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        
+        // Manual Dependency Injection
+        val tokenManager = TokenManager(applicationContext)
+        val api = RetrofitInstance.getApi(tokenManager)
+        val repository = AuthRepository(api, tokenManager)
+        val factory = AuthViewModel.Factory(repository)
+        val viewModel = ViewModelProvider(this, factory)[AuthViewModel::class.java]
+
         setContent {
             VaultaryTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                VaultaryNavGraph(viewModel = viewModel)
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    VaultaryTheme {
-        Greeting("Android")
     }
 }
