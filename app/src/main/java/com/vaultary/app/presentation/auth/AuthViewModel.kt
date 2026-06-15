@@ -18,6 +18,9 @@ class AuthViewModel(
     private val _uiState = MutableStateFlow<AuthUiState>(AuthUiState.Idle)
     val uiState: StateFlow<AuthUiState> = _uiState.asStateFlow()
 
+    private val _isAppUnlocked = MutableStateFlow<Boolean>(false)
+    val isAppUnlocked: StateFlow<Boolean> = _isAppUnlocked.asStateFlow()
+
     private var tempToken: String? = null
 
     fun checkInitialAuth() {
@@ -173,6 +176,10 @@ class AuthViewModel(
 
     fun resetState() {
         _uiState.value = AuthUiState.Idle
+    }
+
+    fun setAppUnlocked(unlocked: Boolean) {
+        _isAppUnlocked.value = unlocked
     }
 
     class Factory(private val repository: AuthRepository) : ViewModelProvider.Factory {
