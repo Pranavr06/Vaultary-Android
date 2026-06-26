@@ -1,4 +1,4 @@
-# Vaultary Android
+# 📱 Vaultary Android
 
 Vaultary Android is the native Android client for the Vaultary platform. It connects to the same backend APIs and shared database used by the Vaultary web application, allowing users to seamlessly access and manage their data across both web and mobile platforms.
 
@@ -6,7 +6,7 @@ Any changes made through the Android application are instantly reflected on the 
 
 > 🚧 **Project Status:** Currently under active development.
 
-## Key Features
+## ✨ Key Features
 
 * Cross-platform data synchronization
 * Shared backend with Vaultary Web
@@ -18,7 +18,7 @@ Any changes made through the Android application are instantly reflected on the 
 * Password strength analysis & Breach detection services
 * Modern Android UI using Jetpack Compose
 
-## Architecture
+## 🏗️ Architecture
 
 ```text
  Vaultary Web (HTML/JS/CSS)
@@ -33,21 +33,21 @@ Any changes made through the Android application are instantly reflected on the 
 Vaultary Android (Kotlin + Jetpack Compose)
 ```
 
-## Tech Stack
+##  🛠️  Tech Stack
 
-### Android
+### 📱 Android
 
 * Kotlin
 * Jetpack Compose
 * Material 3
 * Android Biometric API
 
-### Networking
+### 🌐 Networking
 
 * Retrofit
 * OkHttp
 
-### Backend & Cloud
+### ☁️ Backend & Cloud
 
 * Python Flask API
 * Supabase (PostgreSQL)
@@ -55,6 +55,6 @@ Vaultary Android (Kotlin + Jetpack Compose)
 
 ---
 
-## Synchronization
+##  🔄  Synchronization
 
 The Android application and the Vaultary web application use the same backend services and database. Any data created, updated, or deleted from one platform is automatically encrypted and reflected across all connected platforms.
