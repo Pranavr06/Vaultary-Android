@@ -1,5 +1,16 @@
 # 📱 Vaultary Android
 
+```markdown
+![Kotlin](https://img.shields.io/badge/Kotlin-2.0+-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)
+![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-UI-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white)
+![Android](https://img.shields.io/badge/Android-Native-3DDC84?style=for-the-badge&logo=android&logoColor=white)
+![Flask API](https://img.shields.io/badge/Backend-Flask-black?style=for-the-badge&logo=flask)
+![Supabase](https://img.shields.io/badge/Database-Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
+![Security](https://img.shields.io/badge/Security-AES--256-red?style=for-the-badge&logo=letsencrypt&logoColor=white)
+![Authentication](https://img.shields.io/badge/Auth-JWT-orange?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Under%20Development-yellow?style=for-the-badge)
+```
+
 Vaultary Android is the native Android client for the Vaultary platform. It connects to the same backend APIs and shared database used by the Vaultary web application, allowing users to seamlessly access and manage their data across both web and mobile platforms.
 
 Any changes made through the Android application are instantly reflected on the web platform, and vice versa, ensuring a synchronized cross-platform experience.
